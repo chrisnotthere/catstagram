@@ -25,7 +25,7 @@ function Modal() {
     // create a post and add to firestore collection
     // get post id for newly created post
     // upload img to firebase storage with the post id
-    // get a download url from firebase storage and update the og post with img
+    // get a download url from firebase storage and update the original post with image
 
     const docRef = await addDoc(collection(db, 'posts'), {
       username: session.user.username,
@@ -49,7 +49,6 @@ function Modal() {
     setOpen(false);
     setLoading(false);
     setSelectedFile(null);
-
   }
 
   const addImageToPost = (e) => {
@@ -61,7 +60,6 @@ function Modal() {
     reader.onload = (readerEvent) => {
       setSelectedFile(readerEvent.target.result);
     };
-
   }
 
   return (
@@ -106,10 +104,7 @@ function Modal() {
             <div className='inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4
             text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle
             sm:max-w-sm sm:w-full'>
-
-
               <div>
-
                 {selectedFile ? (
                   <img 
                     src={selectedFile} 
@@ -117,7 +112,6 @@ function Modal() {
                     onClick={() => setSelectedFile(null)}
                     className='w-full object-contain cursor-pointer'
                   />
-
 
                 ) : (
                   <div onClick={() => filePickerRef.current.click()}
@@ -128,8 +122,6 @@ function Modal() {
                     />
                   </div>
                 )}
-
-
 
                 <div>
 
@@ -159,38 +151,27 @@ function Modal() {
                         placeholder='Please enter a caption...'
                       />
                     </div>
-
                 </div>
 
-                
                 <div className='mt-5 sm:mt-6'>
-
-
-
 
                   <button
                     type='button'
                     disabled={!selectedFile}
                     className='inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium
-                    text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:text-sm desabled:bg-gray-500
+                    text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:text-sm disabled:bg-gray-500
                     disabled:cursor-not-allowed hover:disabled:bg-gray-300'
                     onClick={uploadPost}
                   >
                     {loading ? 'Uploading...' : 'Upload Post'}
                   </button>
-
                 </div>
-
               </div>
-              
             </div>
-
           </Transition.Child>
-
         </div>
       </Dialog>
     </Transition.Root>
-
   )
 }
 
