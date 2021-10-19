@@ -1,4 +1,4 @@
-import { addDoc, collection, onSnapshot, orderBy, query, serverTimestamp } from '@firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp, setDoc } from '@firebase/firestore';
 import {
   BookmarkIcon,
   ChatIcon,
@@ -34,28 +34,51 @@ function Post({ id, username, userImg, img, caption }) {
     [db, id]
   );
 
-  function focusTextInput() {
-    textInput.current.focus();
-  }
+  useEffect(
+    () => 
+      onSnapshot(collection(db, 'posts', id, 'likes'), 
+        (snapshot) => setLikes(snapshot.docs)
+      ),
+    [db, id]
+  );
 
-  const likePost = () => {
-    alert('like the post');
-  }
+  //check if like.id matches up with userid to determine if user has liked a post
+  useEffect(
+    () => 
+      setHasLiked(
+        likes.findIndex((like) => like.id === session?.user?.uid) !== -1
+      ), 
+    [likes]
+  );
+
+  const likePost = async () => {
+    if (hasLiked) {
+      await deleteDoc(doc(db, 'posts', id, 'likes', session.user.uid))
+    } else {
+      await setDoc(doc(db, 'posts', id, 'likes', session.user.uid), {
+        username: session.user.username,
+      });
+    }
+  };
 
   const sendComment = async (e) => {
     e.preventDefault();
 
     const commentToSend = comment;
     setComment('');
-
+    
     await addDoc(collection(db, 'posts', id, 'comments'), {
       comment: commentToSend,
       username: session.user.username,
       userImage: session.user.image,
       timestamp: serverTimestamp(),
     });
-
+    
   };
+  
+  function focusTextInput() {
+    textInput.current.focus();
+  }
 
   const message = () => {
     alert('under construction')
@@ -86,7 +109,11 @@ function Post({ id, username, userImg, img, caption }) {
       {/* icons */}
       <div className='flex justify-between px-4 py-4'>
         <div className='flex space-x-4'>
-          <HeartIcon onClick={likePost} className='btn' />
+          {hasLiked ? (
+            <HeartIconFilled onClick={likePost} className='btn text-red-500' />
+          ) : (
+            <HeartIcon onClick={likePost} className='btn' />
+          )}
           <ChatIcon className='btn' onClick={focusTextInput} />
           <PaperAirplaneIcon className='btn rotate-45' onClick={message} />
         </div>
@@ -95,9 +122,13 @@ function Post({ id, username, userImg, img, caption }) {
       
       {/* captions */}
       <div className='p-5 truncate'>
-        <p className='font-bold mb-1'> likes</p>
+
+        {likes.length > 0 && (
+          <p className='font-bold mb-1'>{likes.length} likes</p>
+        )}
+
         <span className='font-bold mr-1'>{username} </span>
-      {caption}
+        {caption}
       </div>
       
       {/* comments */}
