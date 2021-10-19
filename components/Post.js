@@ -7,10 +7,16 @@ import {
   PaperAirplaneIcon,
 } from '@heroicons/react/outline'
 import { HeartIcon as HeartIconFilled } from '@heroicons/react/solid'
-import React, { useRef } from 'react';
+import { useSession } from 'next-auth/react';
+import React, { useRef, useState } from 'react';
 import Moment from 'react-moment';
 
-function Post({ id, username, userImg, img, caption, likes, comments, timestamp }) {
+function Post({ id, username, userImg, img, caption }) {
+  const { data: session } = useSession();
+  const [comment, setComment] = useState('');
+  const [comments, setComments] = useState([]);
+  const [likes, setLikes] = useState ([]);
+  const [hasLiked, setHasLiked] = useState([]);
 
   const textInput = useRef(null);
 
@@ -66,7 +72,7 @@ function Post({ id, username, userImg, img, caption, likes, comments, timestamp 
       
       {/* captions */}
       <p className='p-5 truncate'>
-        <p className='font-bold mb-1'>{likes} likes</p>
+        <p className='font-bold mb-1'> likes</p>
         <span className='font-bold mr-1'>{username} </span>
       {caption}
       </p>
