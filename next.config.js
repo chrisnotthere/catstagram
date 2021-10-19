@@ -1,6 +1,6 @@
 module.exports = {
   images: {
-    // domains: ['links.papareact.com']
+    domains: ['*']
   },
 
   //this is to stop 'Module not found: Can't resolve 'tls',etc error
