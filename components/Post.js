@@ -107,24 +107,26 @@ function Post({ id, username, userImg, img, caption }) {
       />
       
       {/* icons */}
-      <div className='flex justify-between px-4 py-4'>
-        <div className='flex space-x-4'>
-          {hasLiked ? (
-            <HeartIconFilled onClick={likePost} className='btn text-red-500' />
-          ) : (
-            <HeartIcon onClick={likePost} className='btn' />
-          )}
-          <ChatIcon className='btn' onClick={focusTextInput} />
-          <PaperAirplaneIcon className='btn rotate-45' onClick={message} />
+      {session && (
+        <div className='flex justify-between px-4 py-4'>
+          <div className='flex space-x-4'>
+            {hasLiked ? (
+              <HeartIconFilled onClick={likePost} className='btn text-red-500' />
+            ) : (
+              <HeartIcon onClick={likePost} className='btn' />
+            )}
+            <ChatIcon className='btn' onClick={focusTextInput} />
+            <PaperAirplaneIcon className='btn rotate-45' onClick={message} />
+          </div>
+          <BookmarkIcon className='btn' />
         </div>
-        <BookmarkIcon className='btn' />
-      </div>
+      )}
       
       {/* captions */}
       <div className='p-5 truncate'>
 
         {likes.length > 0 && (
-          <p className='font-bold mb-1'>{likes.length} likes</p>
+          <p className='font-bold mb-1'>liked by {likes.length} user{likes.length>1 && (<span>s</span>)}</p>
         )}
 
         <span className='font-bold mr-1'>{username} </span>
@@ -132,6 +134,7 @@ function Post({ id, username, userImg, img, caption }) {
       </div>
       
       {/* comments */}
+      
       {comments.length > 0 && (
         <div className='ml-10 h-20 overflow-y-scroll scrollbar-thumb-black scrollbar-thin'>
           {comments.map(comment => (
@@ -161,25 +164,28 @@ function Post({ id, username, userImg, img, caption }) {
       )}
 
       
-      
       {/* input box */}
-      <form className='flex items-center p-4'>
-        <EmojiHappyIcon className='h-7' />
-        <input
-          type='text'
-          value={comment}
-          onChange={e => setComment(e.target.value)}
-          placeholder='Add a comment...'
-          className='mx-2 border-none flex-1 focus:ring-black focus:border-black rounded-full '
-          ref={textInput}
-        />
-        <button 
-          type='submit' 
-          disable={!comment.trim()} 
-          className='font-semibold text-blue-400' 
-          onClick={sendComment}
-        >Post</button>
-      </form>
+      {session && (
+        <form className='flex items-center p-4'>
+          <EmojiHappyIcon className='h-7' />
+          <input
+            type='text'
+            value={comment}
+            onChange={e => setComment(e.target.value)}
+            placeholder='Add a comment...'
+            className='mx-2 border-none flex-1 focus:ring-black focus:border-black rounded-full '
+            ref={textInput}
+          />
+          <button 
+            type='submit' 
+            disable={!comment.trim()} 
+            className='font-semibold text-blue-400' 
+            onClick={sendComment}
+          >Post</button>
+        </form>
+
+      )}
+      
 
 
     </div>
