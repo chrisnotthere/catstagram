@@ -38,7 +38,7 @@ function Header() {
           />
         </div>
 
-        <CameraIcon className=' w-10 md:hidden' />
+        <CameraIcon onClick={() => router.push('/')} className=' w-10 md:hidden cursor-pointer' />
 
         {/* MIDDLE - searchbar */}
         <div className='max-w-xs'>
