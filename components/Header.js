@@ -12,49 +12,57 @@ import {
 import { useRouter } from "next/dist/client/router";
 import { useRecoilState } from "recoil";
 import { useSession, signIn, signOut } from "next-auth/react";
+import logo from '../public/logo.png';
+import Image from 'next/image'
 //import { modalState } from '../atoms/modalAtom';
 
 function Header() {
   //rename data object as 'session'
   const { data: session } = useSession();
-  
+
   //const [open, setOpen] = useRecoilState(modalState); // global state using recoil. see atoms/modalAtom.js
   const router = useRouter();
 
   console.log(session);
 
-
-
   return (
-    <div className="flex bg-red-400 h-20 justify-between sticky items-center px-10">
+    <div className='bg-red-400 sticky top-0 z-50'>
+      <div className='flex justify-between max-w-6xl mx-5 lg:mx-auto'>
 
-      {/* LEFT - logo/name text */}
-      <div className='flex '>
-        <h1 className='logo text-5xl hidden md:inline-flex'>Catstagram</h1>
-        <CameraIcon className='h-10 w-10 md:hidden' />
-      </div>
-
-      {/* MIDDLE - searchbar */}
-
-      <div className='max-w-xs'>
-        <div className='relative mt-1 p-3 rounder-md '>
-          <div className='absolute inset-y-0 pl-3 flex items-center 
-          pointer-events-none'>
-            <SearchIcon className='h-5 w-5 text-gray-500' />
-          </div>
-          <input 
-            className='block w-full pl-10  border-gray-300 focus:ring-black focus:border-black rounded-full' 
-            type='text' 
-            placeholder='Search...' 
+        {/* LEFT - logo/name text */}
+        <div onClick={() => router.push('/')} className='relative hidden md:inline-grid w-28 
+        cursor-pointer' >
+          <Image 
+            src='/../public/logo.png'
+            layout='fill'
+            objectFit='contain'
           />
         </div>
-      </div>
 
-      {/* RIGHT - icons/signin */}
+        <CameraIcon className=' w-10 md:hidden' />
 
-      <div className='space-x-1 flex text-center'>
-        <MenuIcon className='h-10 w-10 md:hidden' />
-        <HomeIcon className='navBtn' />
+        {/* MIDDLE - searchbar */}
+        <div className='max-w-xs'>
+          <div className='relative mt-1 p-3 rounder-md '>
+            <div className='absolute inset-y-0 pl-3 flex items-center 
+            pointer-events-none'>
+              <SearchIcon className='h-5 w-5 text-gray-500' />
+            </div>
+            <input 
+              className='bg-gray-50 block w-full pl-10 sm:text-sm
+              border-gray-300 focus:ring-black focus:border-black rounded-full' 
+              type='text' 
+              placeholder='Search' 
+            />
+          </div>
+        </div>
+
+        {/* RIGHT - icons/signin */}
+        <div className='flex items-center 
+        justify-end space-x-4' >
+          <HomeIcon onClick={() => router.push('/')} className='navBtn' />
+          <MenuIcon className='h-8 md:hidden 
+          cursor-pointer' />
 
         {session ? (
           <>
@@ -74,6 +82,7 @@ function Header() {
           </>
         )}
 
+        </div>
       </div>
     </div>
   )
