@@ -14,13 +14,12 @@ import { useRecoilState } from "recoil";
 import { useSession, signIn, signOut } from "next-auth/react";
 import logo from '../public/logo.png';
 import Image from 'next/image'
-//import { modalState } from '../atoms/modalAtom';
+import { modalState } from '../atoms/modalAtom';
 
 function Header() {
   //rename data object as 'session'
   const { data: session } = useSession();
-
-  //const [open, setOpen] = useRecoilState(modalState); // global state using recoil. see atoms/modalAtom.js
+  const [open, setOpen] = useRecoilState(modalState); // global state using recoil. see atoms/modalAtom.js
   const router = useRouter();
 
   console.log(session);
