@@ -1,14 +1,23 @@
 import { getProviders, signIn as SignIntoProvider } from 'next-auth/react'
 import Header from '../../components/Header';
+import Image from 'next/image'
+import logo from '../../public/logo.png';
 
-// browser...
+
 function signIn({ providers }) {
   return (
     <>
     <Header />
 
     <div className='flex flex-col items-center justify-center min-h-screen py-2 -mt-56 px-14 text-center'>
-      <img className='w-80' src='https://links.papareact.com/ocw' alt='' />
+
+        <Image 
+              src='/../public/logo.png'
+              width="300" 
+              height="100"
+              objectFit='contain'
+            />
+
       <p className='font-xs italic'>
         This is not a REAL app, it is for educational purposes only.
       </p>
