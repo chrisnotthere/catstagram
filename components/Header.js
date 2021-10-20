@@ -22,7 +22,7 @@ function Header() {
   const [open, setOpen] = useRecoilState(modalState); // global state using recoil. see atoms/modalAtom.js
   const router = useRouter();
 
-  console.log(session);
+  //console.log(session);
 
   return (
     <div className='bg-red-400 sticky top-0 z-50'>
