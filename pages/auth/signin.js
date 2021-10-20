@@ -1,47 +1,64 @@
 import { getProviders, signIn as SignIntoProvider } from 'next-auth/react'
 import Header from '../../components/Header';
 import Image from 'next/image'
-import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
-import { app } from '../../firebase';
+import { getAuth, signInAnonymously, onAuthStateChanged,  } from "firebase/auth";
 import { useRouter } from 'next/dist/client/router';
+import { useState } from 'react';
+import { useAuth } from '../auth/authUserContext';
 
 function signIn({ providers }) {
-
-  console.log(providers);
   const router = useRouter();
+  const { signInWithEmailAndPassword } = useAuth();
+  const [error, setError] = useState(null);
 
-  const signInAnon = () => {
-    
-    console.log('signing in as anon...');
-    const auth = getAuth();
 
-    signInAnonymously(auth)
-      .then(() => {
-        // Signed in..
-        console.log('signed in')
+  //   onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       // User is signed in, see docs for a list of available properties
+  //       // https://firebase.google.com/docs/reference/js/firebase.User
+  //       const uid = user.uid;
+  //       user.username = 'Test User';
+  //       user.image = '../public/anon.png';
+  //       console.log('anon user is signed in', user);
+  //       console.log(user.providerId);
+  //       //router.push('/');
+
+  // const signInGuestUser = () => {
+
+  //   const auth = getAuth();
+  //   signInWithEmailAndPassword(auth, 'guestaccount@mail.com', 'guestaccount')
+  //     .then((userCredential) => {
+  //       // Signed in 
+  //       const user = userCredential.user;
+  //       console.log('signed in')
+  //       user.username = 'Guest Account';
+  //       user.image = '../public/anon.png';
+  //       console.log(user);
+  //       // ...
+  //     })
+  //     .catch((error) => {
+  //       const errorCode = error.code;
+  //       const errorMessage = error.message;
+  //       console.log(errorCode, errorMessage);
+  //     });
+  // }
+
+  const signInGuestUser = () => {
+
+    setError(null)
+    signInWithEmailAndPassword('guestaccount@mail.com', 'guestaccount')
+      .then(authUser => {
+        console.log({authUser});
+        authUser.user.username = 'Guest User';
+        console.log(authUser.user);
+        router.push('/');
       })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ...
+      .catch(error => {
+        setError(error.message)
       });
 
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/firebase.User
-        const uid = user.uid;
-        user.username = 'Test User';
-        user.image = '../public/anon.png';
-        console.log('anon user is signed in', user);
-        router.push('/');
-      } else {
-        // User is signed out
-        // ...
-      }
-    });
-
   }
+
 
   return (
     <>
@@ -73,9 +90,9 @@ function signIn({ providers }) {
 
         <button 
           className='p-3 bg-blue-500 rounded-lg text-white signinBtn'
-          onClick={signInAnon}
+          onClick={signInGuestUser}
         >
-            Sign in Anonymously
+            Sign in as Guest
           </button>
 
       </div>

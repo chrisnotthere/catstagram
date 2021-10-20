@@ -1,9 +1,10 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
 
-
-// Your web app's Firebase configuration
+//Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBBDSi6SM3hAjlKKwEVrShJCYulBSYw3nQ",
   authDomain: "catstagram-50b14.firebaseapp.com",
@@ -19,4 +20,4 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const db = getFirestore();
 const storage = getStorage();
 
-export { app, db, storage };
+export { app, db, storage, firebase, firebaseConfig };

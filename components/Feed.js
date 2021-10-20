@@ -3,9 +3,11 @@ import Stories from "./Stories"
 import MiniProfile from './MiniProfile'
 import Suggestions from './Suggestions'
 import { useSession } from "next-auth/react";
+import { useAuth } from '../pages/auth/authUserContext';
 
 function Feed() {
   const { data: session } = useSession();
+  const { authUser, loading, signOut } = useAuth();
 
   return (
 
@@ -31,6 +33,8 @@ function Feed() {
           </div>
         </section>
       )}
+
+    { authUser && <div>Congratulations {authUser?.email}! You are logged in.</div> }
 
     </main>
   )

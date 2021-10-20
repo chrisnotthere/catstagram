@@ -1,8 +1,12 @@
 import { useSession, signIn, signOut } from 'next-auth/react'
+import { useAuth } from '../pages/auth/authUserContext';
 
 function MiniProfile() {
 
   const { data: session } = useSession();
+  const { authUser, loading } = useAuth();
+
+  console.log({authUser}, {loading});
 
   return (
     <div className='flex items-center mt-14 ml-10'>
