@@ -7,7 +7,8 @@ import {
   PaperAirplaneIcon,
   MenuIcon,
   UserCircleIcon,
-  CameraIcon
+  CameraIcon,
+  QuestionMarkCircleIcon
 } from '@heroicons/react/outline';
 import { useRouter } from "next/dist/client/router";
 import { useRecoilState } from "recoil";
@@ -90,14 +91,13 @@ function Header() {
 
         { authUser && (
           <>
+          {console.log(authUser)}
             <PlusCircleIcon onClick={() => setOpen(true)} className='navBtn' />
-            <img 
-              src={authUser?.image} 
-              onClick={signOut}
-              alt='profile pic' 
-              className='h-8 w-8 rounded-full hover:scale-125 cursor-pointer '
+            <QuestionMarkCircleIcon 
+              onClick={signOut} 
+              className='h-8 w-8 hover:scale-125 cursor-pointer '
             />
-            <button onClick={signOut} className='hover:scale-110' >Sign out Guest</button> 
+            <button onClick={signOut} className='hover:scale-110' >Sign out</button> 
           </>
         )}
         
