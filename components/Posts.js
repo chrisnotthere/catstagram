@@ -6,8 +6,6 @@ import Post from "./Post"
 function Posts() {  
   const [posts, setPosts] = useState([]);
 
-  console.log(posts);
-
   useEffect(
     () => 
       onSnapshot(
