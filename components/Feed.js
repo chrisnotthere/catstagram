@@ -10,33 +10,36 @@ function Feed() {
   const { authUser, loading, signOut } = useAuth();
 
   return (
+    <>
+      { authUser && <div>Congratulations {authUser?.email}! You are logged in.</div> }
+      { !authUser && <div>You are not logged in...</div>}
 
-    // is there is no session, center the feed
-    <main className={`grid grid-cols-1 md:grid-cols-2 md:max-w-3xl
-    xl:grid-cols-3 xl:max-w-6xl mx-auto bg-blue-100 mt-2
-    ${!session && '!grid-cols-1 !max-w-3xl'}`}>
+      {/* // is there is no session, center the feed */}
+      <main className={`grid grid-cols-1 md:grid-cols-2 md:max-w-3xl
+      xl:grid-cols-3 xl:max-w-6xl mx-auto bg-blue-100 mt-2
+      ${!session  && '!grid-cols-1 !max-w-3xl'}`}>
 
-      <section className='col-span-2 p-2' >
+        <section className='col-span-2 p-2' >
 
-        <Stories />
+          <Stories />
 
-        <Posts />
+          <Posts />
 
-      </section>
-
-      {session && (
-        <section className='hidden xl:inline-grid md:col-span-1 bg-yellow-200'>
-          <div className='fixed top-20'>
-            <MiniProfile />
-            <Suggestions />
-            
-          </div>
         </section>
-      )}
 
-    { authUser && <div>Congratulations {authUser?.email}! You are logged in.</div> }
+        {session  &&(
+          <section className='hidden xl:inline-grid md:col-span-1 bg-yellow-200'>
+            <div className='fixed top-20'>
+              <MiniProfile />
+              <Suggestions />
+              
+            </div>
+          </section>
+        )}
 
-    </main>
+
+      </main>
+    </>
   )
 }
 

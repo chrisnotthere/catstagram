@@ -11,16 +11,19 @@ import {
 } from '@heroicons/react/outline';
 import { useRouter } from "next/dist/client/router";
 import { useRecoilState } from "recoil";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signIn, signOut as signOutSession } from "next-auth/react";
 import logo from '../public/logo.png';
 import Image from 'next/image'
 import { modalState } from '../atoms/modalAtom';
+import { useEffect } from 'react';
+import { useAuth } from '../pages/auth/authUserContext';
 
 function Header() {
   //rename data object as 'session'
   const { data: session } = useSession();
   const [open, setOpen] = useRecoilState(modalState); // global state using recoil. see atoms/modalAtom.js
   const router = useRouter();
+  const { authUser, loading, signOut } = useAuth();
 
   //console.log(session);
 
@@ -68,19 +71,36 @@ function Header() {
             <PlusCircleIcon onClick={() => setOpen(true)} className='navBtn' />
             <img 
               src={session?.user?.image} 
+              onClick={signOutSession}
+              alt='profile pic' 
+              className='h-8 w-8 rounded-full hover:scale-125 cursor-pointer '
+            />
+            <button onClick={signOutSession} className='hidden xl:inline-block hover:scale-110'>Sign Out</button>
+          </>
+        ) : (
+          <> 
+            {!authUser && (
+              <>
+                <UserCircleIcon className='navBtn' onClick={signIn} />
+                <button className='hover:scale-110' onClick={signIn}>Sign In</button>
+              </>
+            )}
+          </>
+        )}
+
+        { authUser && (
+          <>
+            <PlusCircleIcon onClick={() => setOpen(true)} className='navBtn' />
+            <img 
+              src={authUser?.image} 
               onClick={signOut}
               alt='profile pic' 
               className='h-8 w-8 rounded-full hover:scale-125 cursor-pointer '
             />
-            <button onClick={signOut} className='hidden xl:inline-block hover:scale-110'>Sign Out</button>
-          </>
-        ) : (
-          <>
-            <UserCircleIcon className='navBtn' onClick={signIn} />
-            <button className='hover:scale-110' onClick={signIn}>Sign In</button>
+            <button onClick={signOut} className='hover:scale-110' >Sign out Guest</button> 
           </>
         )}
-
+        
         </div>
       </div>
     </div>
