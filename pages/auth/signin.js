@@ -64,7 +64,7 @@ function signIn({ providers }) {
     <>
     <Header />
 
-    <div className='flex flex-col items-center justify-center min-h-screen py-2 -mt-56 px-14 text-center'>
+    <div className='dark:bg-gray-600 h-auto flex flex-col items-center justify-center min-h-screen py-2 -mt-56 px-14 text-center'>
 
         <Image 
               src='/../public/logo.png'
