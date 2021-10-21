@@ -23,6 +23,9 @@ function Post({ id, username, userImg, img, caption }) {
   const textInput = useRef(null);
   const { authUser } = useAuth();
 
+  console.log({session});
+  console.log(authUser);
+
   // get comments from firestore
   useEffect(
     () => 
@@ -68,13 +71,23 @@ function Post({ id, username, userImg, img, caption }) {
 
     const commentToSend = comment;
     setComment('');
+
+    session ? (
+      await addDoc(collection(db, 'posts', id, 'comments'), {
+        comment: commentToSend,
+        username: session.user.username,
+        userImage: session.user.image,
+        timestamp: serverTimestamp(),
+      })
+    ) : (
+      await addDoc(collection(db, 'posts', id, 'comments'), {
+        comment: commentToSend,
+        username: 'Guest User',
+        userImage: 'https://pbs.twimg.com/profile_images/1206966076707364865/rrvFo4-A_400x400.jpg',
+        timestamp: serverTimestamp(),
+      })
+    )
     
-    await addDoc(collection(db, 'posts', id, 'comments'), {
-      comment: commentToSend,
-      username: session.user.username,
-      userImage: session.user.image,
-      timestamp: serverTimestamp(),
-    });
     
   };
   
@@ -175,7 +188,7 @@ function Post({ id, username, userImg, img, caption }) {
             value={comment}
             onChange={e => setComment(e.target.value)}
             placeholder='Add a comment...'
-            className='mx-2 border-none flex-1 focus:ring-black focus:border-black rounded-full '
+            className='dark:text-black mx-2 border-none flex-1 focus:ring-black focus:border-black rounded-full '
             ref={textInput}
           />
           <button 
