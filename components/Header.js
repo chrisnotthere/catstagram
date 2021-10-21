@@ -8,7 +8,9 @@ import {
   MenuIcon,
   UserCircleIcon,
   CameraIcon,
-  QuestionMarkCircleIcon
+  QuestionMarkCircleIcon,
+  MoonIcon,
+  SunIcon,
 } from '@heroicons/react/outline';
 import { useRouter } from "next/dist/client/router";
 import { useRecoilState } from "recoil";
@@ -16,8 +18,9 @@ import { useSession, signIn, signOut as signOutSession } from "next-auth/react";
 import logo from '../public/logo.png';
 import Image from 'next/image'
 import { modalState } from '../atoms/modalAtom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '../pages/auth/authUserContext';
+import { useTheme } from 'next-themes';
 
 function Header() {
   //rename data object as 'session'
@@ -25,21 +28,53 @@ function Header() {
   const [open, setOpen] = useRecoilState(modalState); // global state using recoil. see atoms/modalAtom.js
   const router = useRouter();
   const { authUser, loading, signOut } = useAuth();
+  const { systemTheme, theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
-  //console.log(session);
+  useEffect(() => {
+    setMounted(true);
+  }, [])
+
+  const renderThemeChanger = () => {
+    if(!mounted) return null;
+
+    const currentTheme = theme == 'system' ? systemTheme : theme;
+
+    if (currentTheme == 'dark') {
+      return(
+        <SunIcon 
+          className='w-7 h-7' 
+          role='button' 
+          onClick={() => setTheme('light')} 
+        />
+      )
+    } else {
+      return(
+        <MoonIcon 
+          className='w-7 h-7' 
+          role='button' 
+          onClick={() => setTheme('dark')} 
+        />
+      )
+    }
+
+  }
 
   return (
-    <div className='bg-red-400 sticky top-0 z-50'>
+    <div className='bg-red-400 dark:bg-red-700 sticky top-0 z-50'>
       <div className='flex justify-between max-w-6xl mx-5 lg:mx-auto'>
 
         {/* LEFT - logo/name text */}
-        <div onClick={() => router.push('/')} className='relative hidden md:inline-grid w-28 
-        cursor-pointer' >
+        <div onClick={() => router.push('/')} 
+          className='relative hidden md:inline-grid w-28 
+          cursor-pointer' 
+        >
           <Image 
             src='/../public/logo.png'
             layout='fill'
             objectFit='contain'
           />
+
         </div>
 
         <CameraIcon onClick={() => router.push('/')} className=' w-10 md:hidden cursor-pointer' />
@@ -52,7 +87,7 @@ function Header() {
               <SearchIcon className='h-5 w-5 text-gray-500' />
             </div>
             <input 
-              className='bg-gray-50 block w-full pl-10 sm:text-sm
+              className='bg-gray-50 block w-full pl-10 sm:text-sm max-h-8
               border-gray-300 focus:ring-black focus:border-black rounded-full' 
               type='text' 
               placeholder='Search' 
@@ -63,6 +98,7 @@ function Header() {
         {/* RIGHT - icons/signin */}
         <div className='flex items-center 
         justify-end space-x-4' >
+          {renderThemeChanger()}
           <HomeIcon onClick={() => router.push('/')} className='navBtn' />
           <MenuIcon className='h-8 md:hidden 
           cursor-pointer' />
@@ -83,7 +119,7 @@ function Header() {
             {!authUser && (
               <>
                 <UserCircleIcon className='navBtn' onClick={signIn} />
-                <button className='hover:scale-110' onClick={signIn}>Sign In</button>
+                <button className='hover:scale-110 min-w-max' onClick={signIn}>Sign In</button>
               </>
             )}
           </>
@@ -97,7 +133,7 @@ function Header() {
               onClick={signOut} 
               className='h-8 w-8 hover:scale-125 cursor-pointer '
             />
-            <button onClick={signOut} className='hover:scale-110' >Sign out</button> 
+            <button onClick={signOut} className='hover:scale-110' >Sign Out</button> 
           </>
         )}
         
