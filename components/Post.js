@@ -51,17 +51,21 @@ function Post({ id, username, userImg, img, caption }) {
   useEffect(
     () => 
       setHasLiked(
-        likes.findIndex((like) => like.id === session?.user?.uid) !== -1
+
+        // likes.findIndex((like) => like.id === session?.user?.uid) !== -1
+        likes.findIndex((like) => like.id === (session ? session?.user.uid : authUser?.uid)) !== -1
+
       ), 
     [likes]
   );
 
   const likePost = async () => {
+
     if (hasLiked) {
-      await deleteDoc(doc(db, 'posts', id, 'likes', session.user.uid))
+      await deleteDoc(doc(db, 'posts', id, 'likes', (session ? session.user.uid : authUser.uid) ))
     } else {
-      await setDoc(doc(db, 'posts', id, 'likes', session.user.uid), {
-        username: session.user.username,
+      await setDoc(doc(db, 'posts', id, 'likes', (session ? session.user.uid : authUser.uid) ), {
+        username: (session ? session.user.username : 'guestuser'),
       });
     }
   };
@@ -82,7 +86,7 @@ function Post({ id, username, userImg, img, caption }) {
     ) : (
       await addDoc(collection(db, 'posts', id, 'comments'), {
         comment: commentToSend,
-        username: 'Guest User',
+        username: 'guestuser',
         userImage: 'https://pbs.twimg.com/profile_images/1206966076707364865/rrvFo4-A_400x400.jpg',
         timestamp: serverTimestamp(),
       })
