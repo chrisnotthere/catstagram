@@ -28,9 +28,9 @@ function Modal() {
     // get a download url from firebase storage and update the original post with image
 
     const docRef = await addDoc(collection(db, 'posts'), {
-      username: session.user.username,
+      username: (session ? session.user.username : 'Guest User'),
       caption: captionRef.current.value,
-      profileImg: session.user.image,
+      profileImg: (session ? session.user.image : 'https://pbs.twimg.com/profile_images/1206966076707364865/rrvFo4-A_400x400.jpg'),
       timestamp: serverTimestamp()
     })
 
