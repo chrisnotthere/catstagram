@@ -20,7 +20,7 @@ function Feed() {
       ${!session && !authUser && '!grid-cols-1 !max-w-3xl'}`}>
 
         <section className='col-span-2 p-2' >
-          <Stories />
+          { session || authUser ? <Stories /> : null}
           <Posts />
         </section>
 
