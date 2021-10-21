@@ -12,6 +12,7 @@ import { useSession } from 'next-auth/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { db } from '../firebase';
 import Moment from 'react-moment';
+import { useAuth } from '../pages/auth/authUserContext';
 
 function Post({ id, username, userImg, img, caption }) {
   const { data: session } = useSession();
@@ -20,6 +21,7 @@ function Post({ id, username, userImg, img, caption }) {
   const [likes, setLikes] = useState ([]);
   const [hasLiked, setHasLiked] = useState([]);
   const textInput = useRef(null);
+  const { authUser } = useAuth();
 
   // get comments from firestore
   useEffect(
@@ -107,7 +109,7 @@ function Post({ id, username, userImg, img, caption }) {
       />
       
       {/* icons */}
-      {session && (
+      {session || authUser && (
         <div className='flex justify-between px-4 py-4'>
           <div className='flex space-x-4'>
             {hasLiked ? (
@@ -165,7 +167,7 @@ function Post({ id, username, userImg, img, caption }) {
 
       
       {/* input box */}
-      {session && (
+      {session || authUser && (
         <form className='flex items-center p-4'>
           <EmojiHappyIcon className='h-7' />
           <input
