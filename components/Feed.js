@@ -7,12 +7,12 @@ import { useAuth } from '../pages/auth/authUserContext';
 
 function Feed() {
   const { data: session } = useSession();
-  const { authUser, loading, signOut } = useAuth();
+  const { authUser } = useAuth();
 
   return (
     <>
-      { authUser && <div>Congratulations {authUser?.email}! You are logged in.</div> }
-      { !authUser && <div>You are not logged in...</div>}
+      {/* { authUser ? <div>Congratulations {authUser?.email}! You are logged in.</div> 
+        : <div>You are not logged in...</div> } */}
 
       {/* // is there is no session, center the feed */}
       <main className={`grid grid-cols-1 md:grid-cols-2 md:max-w-3xl
@@ -20,14 +20,11 @@ function Feed() {
       ${!session && !authUser && '!grid-cols-1 !max-w-3xl'}`}>
 
         <section className='col-span-2 p-2' >
-
           <Stories />
-
           <Posts />
-
         </section>
 
-        {session || authUser && (
+        {session || authUser ? (
           <section className='hidden xl:inline-grid md:col-span-1 bg-yellow-200'>
             <div className='fixed top-20'>
               <MiniProfile />
@@ -35,8 +32,7 @@ function Feed() {
               
             </div>
           </section>
-        )}
-
+        ): null }
 
       </main>
     </>

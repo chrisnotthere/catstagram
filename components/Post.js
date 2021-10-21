@@ -109,7 +109,7 @@ function Post({ id, username, userImg, img, caption }) {
       />
       
       {/* icons */}
-      {session || authUser && (
+      {session || authUser ? (
         <div className='flex justify-between px-4 py-4'>
           <div className='flex space-x-4'>
             {hasLiked ? (
@@ -122,7 +122,7 @@ function Post({ id, username, userImg, img, caption }) {
           </div>
           <BookmarkIcon className='btn' />
         </div>
-      )}
+      ) : null }
       
       {/* captions */}
       <div className='p-5 truncate'>
@@ -167,7 +167,7 @@ function Post({ id, username, userImg, img, caption }) {
 
       
       {/* input box */}
-      {session || authUser && (
+      {session || authUser ? (
         <form className='flex items-center p-4'>
           <EmojiHappyIcon className='h-7' />
           <input
@@ -186,7 +186,7 @@ function Post({ id, username, userImg, img, caption }) {
           >Post</button>
         </form>
 
-      )}
+      ) : null }
       
 
 
